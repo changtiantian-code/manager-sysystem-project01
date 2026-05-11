@@ -616,7 +616,6 @@ const resetDialogs = () => {
   dialogs.title = "";
   dialogs.type = "";
   dialogs.visible = false;
-  initTable();
 };
 
 const addDialog = async () => {
@@ -640,7 +639,10 @@ const addDialog = async () => {
   addOrEditRes({
     type: dialogs.type,
     res: res,
-    func: () => resetDialogs(),
+    func: () => {
+      resetDialogs();
+      initTable();
+    }
   });
 };
 
@@ -666,7 +668,10 @@ if (!dialogFormRef.value) return;
   addOrEditRes({
     type: dialogs.type,
     res: res,
-    func: () => resetDialogs(),
+    func: () => {
+      resetDialogs();
+      initTable();
+    }
   });
 };
 const deleteEmp = async (row: Emp) => {

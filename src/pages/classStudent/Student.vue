@@ -266,7 +266,7 @@
             <el-col :span="12">
               <el-form-item label="毕业时间" class="date-box">
                 <el-date-picker
-                  v-model="dialogForm.graduationDate"
+                  v-model="dialogForm.gradutionDate"
                   type="date"
                   placeholder="请选择毕业时间"
                   clearable
@@ -351,6 +351,7 @@ import type { FormInstance, FormRules } from "element-plus";
 import type { Student, StudentParamsType } from "@/types/student";
 import type { Class } from "@/types/class";
 import { log } from "echarts/types/src/util/log.js";
+import { debug } from "console";
 
 const isDeleteDisabled = computed(() => {
   return selectTable.value.length === 0
@@ -376,7 +377,7 @@ let dialogForm = reactive({
   idCard: "",
   isCollege: "" as string | number,
   address: "",
-  graduationDate: "",
+  gradutionDate: "",
 });
 
 const dialogRuleForm = reactive({
@@ -558,12 +559,15 @@ const addDialog = async () => {
   if (!dialogFormRef.value) return;
   const valid = await dialogFormRef.value.validate();
   if (!valid) return;
-  dialogForm.graduationDate = formatTime(dialogForm.graduationDate);
+  dialogForm.gradutionDate = formatTime(dialogForm.gradutionDate);
   const res = await addStudent(dialogForm);
   addOrEditRes({
     type: dialogs.type,
     res: res,
-    func: () => resetDialogs(),
+    func: () => {
+      resetDialogs();
+      initTable();
+    },
   });
 };
 
@@ -571,12 +575,15 @@ const editDialog = async () => {
   if (!dialogFormRef.value) return;
   const valid =  await dialogFormRef.value.validate();
   if (!valid) return;
-  dialogForm.graduationDate = formatTime(dialogForm.graduationDate);
+  dialogForm.gradutionDate = dialogForm.gradutionDate ? formatTime(dialogForm.gradutionDate) : "";
   const res = await editStudent(dialogForm);
   addOrEditRes({
     type: dialogs.type,
     res: res,
-    func: () => resetDialogs(),
+    func: () => {
+      resetDialogs();
+      initTable();
+    },
   });
 };
 
@@ -588,7 +595,7 @@ const resetDialogs = () => {
   dialogForm.isCollege = "";
   dialogForm.name = "";
   dialogForm.no = "";
-  dialogForm.graduationDate = "";
+  dialogForm.gradutionDate = "";
   dialogForm.clazzId = "";
   dialogForm.address = "";
   dialogForm.phone = "";
@@ -596,10 +603,9 @@ const resetDialogs = () => {
   dialogs.title = "";
   dialogs.type = "";
   dialogs.visible = false;
-  initTable();
 };
 
-const onForm = (type) => {
+const onForm = (type: string) => {
   switch (type) {
     case "search":
       search();

@@ -342,7 +342,10 @@ const addDialog = async () => {
   addOrEditRes({
     type: dialogs.type,
     res: res,
-    func: () => resetDialog(),
+    func: () => {
+      resetDialog()
+      initTable();
+    }
   });
 };
 
@@ -356,7 +359,10 @@ const editDialog = async () => {
   addOrEditRes({
     type: dialogs.type,
     res: res,
-    func: () => resetDialog(),
+    func: () =>  {
+      resetDialog()
+      initTable();
+    }
   });
 };
 
@@ -368,7 +374,7 @@ const resetDialog = () => {
   dialogs.title = "";
   dialogs.type = "";
   dialogs.visible = false;
-  initTable();
+  
 };
 
 const initMaster = async () => {
