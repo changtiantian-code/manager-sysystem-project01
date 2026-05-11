@@ -166,6 +166,7 @@
               placeholder="请选择"
               clearable
               style="width: 200px"
+              :teleported="false"
             >
               <el-option
                 v-for="master in masterOption"
@@ -181,6 +182,7 @@
               placeholder="请选择"
               clearable
               style="width: 200px"
+              :teleported="false"
             >
               <el-option
                 v-for="sub in subjectOption"
@@ -220,6 +222,8 @@ import {
   ElLink,
   ElMessageBox,
   ElMessage,
+  ElSelect,
+  ElOption
 } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { ref, reactive, onMounted, watch } from "vue";
@@ -332,11 +336,9 @@ const addDialog = async () => {
   if (!dialogFormRef.value) return;
   const valid = await dialogFormRef.value.validate();
   if (!valid) return;
-  const res = await addClass({
-    ...dialogForm,
-    begin: moment(dialogForm.begin).format("YYYY-MM-DD HH:mm:ss"),
-    end: moment(dialogForm.end).format("YYYY-MM-DD HH:mm:ss"),
-  });
+  dialogForm.begin = moment(dialogForm.begin).format("YYYY-MM-DD HH:mm:ss");
+  dialogForm.end = moment(dialogForm.end).format("YYYY-MM-DD HH:mm:ss");
+  const res = await addClass(dialogForm);
   addOrEditRes({
     type: dialogs.type,
     res: res,
@@ -348,11 +350,9 @@ const editDialog = async () => {
   if (!dialogFormRef.value) return;
   const valid = await dialogFormRef.value.validate();
   if (!valid) return;
-  const res = await editClass({
-    ...dialogForm,
-    begin: moment(dialogForm.begin).format("YYYY-MM-DD HH:mm:ss"),
-    end: moment(dialogForm.end).format("YYYY-MM-DD HH:mm:ss"),
-  });
+  dialogForm.begin = moment(dialogForm.begin).format("YYYY-MM-DD HH:mm:ss");
+  dialogForm.end = moment(dialogForm.end).format("YYYY-MM-DD HH:mm:ss");
+  const res = await editClass(dialogForm);
   addOrEditRes({
     type: dialogs.type,
     res: res,

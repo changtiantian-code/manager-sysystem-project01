@@ -18,6 +18,7 @@
                 v-model="form.degree"
                 placeholder="请选择"
                 style="width: 200px"
+                :teleported="false"
               >
                 <el-option
                   v-for="item in degreeOption"
@@ -39,6 +40,7 @@
                 remote
                 reserve-keyword
                 :remote-method="onRemoteMethod"
+                :teleported="false"
               >
                 <el-option
                   v-for="item in classOption"
@@ -188,6 +190,7 @@
                   v-model="dialogForm.gender"
                   placeholder="请选择"
                   clearable
+                  :teleported="false"
                 >
                   <el-option
                     v-for="gender in genderOption"
@@ -224,6 +227,7 @@
                   v-model="dialogForm.isCollege"
                   placeholder="请选择"
                   clearable
+                  :teleported="false"
                 >
                   <el-option
                     v-for="collect in collectOption"
@@ -247,7 +251,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="最高学历">
-                <el-select v-model="dialogForm.degree" placeholder="请选择">
+                <el-select v-model="dialogForm.degree" placeholder="请选择" clearable>
                   <el-option
                     v-for="item in degreeOption"
                     :key="item.value"
@@ -279,6 +283,7 @@
                 remote
                 reserve-keyword
                 :remote-method="onRemoteMethod"
+                :teleported="false"
                 >
                   <el-option
                     v-for="item in classOption"
@@ -345,6 +350,7 @@ import { formatTime, addOrEditRes } from "@/utils/ways";
 import type { FormInstance, FormRules } from "element-plus";
 import type { Student, StudentParamsType } from "@/types/student";
 import type { Class } from "@/types/class";
+import { log } from "echarts/types/src/util/log.js";
 
 const isDeleteDisabled = computed(() => {
   return selectTable.value.length === 0
@@ -370,7 +376,7 @@ let dialogForm = reactive({
   idCard: "",
   isCollege: "" as string | number,
   address: "",
-  graduationDate: "" as string | Date,
+  graduationDate: "",
 });
 
 const dialogRuleForm = reactive({
@@ -478,7 +484,7 @@ const add = () => {
 const edit = async (row: Student) => {
   const res = await getStudentById(row.id);
   if (res.code === 1) {
-    Object.assign(dialogForm, res.data);
+    dialogForm = reactive(res.data)
     console.log(dialogForm, 1);
     dialogs.title = "修改学员";
     dialogs.visible = true;
@@ -552,11 +558,8 @@ const addDialog = async () => {
   if (!dialogFormRef.value) return;
   const valid = await dialogFormRef.value.validate();
   if (!valid) return;
-  
-  const res = await addStudent({
-    ...dialogForm,
-    graduationDate: formatTime(dialogForm.graduationDate),
-  });
+  dialogForm.graduationDate = formatTime(dialogForm.graduationDate);
+  const res = await addStudent(dialogForm);
   addOrEditRes({
     type: dialogs.type,
     res: res,
@@ -568,10 +571,8 @@ const editDialog = async () => {
   if (!dialogFormRef.value) return;
   const valid =  await dialogFormRef.value.validate();
   if (!valid) return;
-  const res = await editStudent({
-    ...dialogForm,
-    graduationDate: formatTime(dialogForm.graduationDate),
-  });
+  dialogForm.graduationDate = formatTime(dialogForm.graduationDate);
+  const res = await editStudent(dialogForm);
   addOrEditRes({
     type: dialogs.type,
     res: res,
@@ -591,7 +592,6 @@ const resetDialogs = () => {
   dialogForm.clazzId = "";
   dialogForm.address = "";
   dialogForm.phone = "";
-
   dialogFormRef.value.resetFields();
   dialogs.title = "";
   dialogs.type = "";

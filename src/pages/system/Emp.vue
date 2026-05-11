@@ -19,6 +19,7 @@
                 placeholder="请选择"
                 style="width: 200px"
                 clearable
+                :teleported="false"
               >
                 <el-option
                   v-for="gender in genderOption"
@@ -169,6 +170,7 @@
                   v-model="dialogForm.gender"
                   placeholder="请选择"
                   clearable
+                  :teleported="false"
                 >
                   <el-option
                     v-for="gender in genderOption"
@@ -196,6 +198,7 @@
                   v-model="dialogForm.job"
                   placeholder="请选择"
                   clearable
+                  :teleported="false"
                 >
                   <el-option
                     v-for="job in jobOption"
@@ -223,6 +226,7 @@
                   v-model="dialogForm.deptId"
                   placeholder="请选择"
                   clearable
+                  :teleported="false"
                 >
                   <el-option
                     v-for="dept in deptOption"
@@ -568,8 +572,6 @@ const edit = async (row: Emp) => {
   const res = await getEmp(row.id);
   const { code, data } = res;
   if (code === 1) {
-    console.log(data, 1);
-    
     const empExprList = data.empExprList && data.empExprList.length > 0 ? data.empExprList.map((_: any) => {
       return {
         company: _.company,
