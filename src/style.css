@@ -1,0 +1,51 @@
+html, body{
+  margin: 0;
+  height: 100%;
+}
+
+.btn-col{
+  width: 100%;
+}
+
+.btn-col .el-form-item {
+  width: 100%;
+}
+
+.btn-col .el-form-item__content{
+  width: 100%;
+  text-align: right;
+}
+
+.btn-col .el-row{
+  width: 100%;
+}
+
+
+.btn-col .el-row .el-col:nth-child(2) {
+  text-align: left;
+}
+
+.table-box{
+  margin-top: 10px;
+}
+
+.link-right {
+  padding-right: 20px;
+}
+
+.right-col{
+  text-align: right;
+}
+
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
+.dialog-footer {
+  text-align: center;
+}
+h2{
+  text-align: center;
+}
