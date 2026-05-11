@@ -4,7 +4,7 @@ import type { UserInfo } from "@/types/login";
 export const useLoginStore = defineStore("login", {
     state: () => ({
         username: "",
-        id: null as number | null,
+        id: localStorage.getItem('id') || null,
         token: localStorage.getItem('token') || ""
     }),
     getters: {
@@ -12,11 +12,10 @@ export const useLoginStore = defineStore("login", {
     },
     actions: {
         setUserInfo(user: UserInfo) {
-            console.log(user, 0);
-            
             this.username = user.username;
             this.id = user.id;
-            this.token = user.token
+            this.token = user.token;
+            localStorage.setItem("id", user.id);
             localStorage.setItem("token", user.token);
         },
         logout() {
@@ -24,6 +23,8 @@ export const useLoginStore = defineStore("login", {
             this.id = null;
             this.token = "";
             localStorage.removeItem("token");
+            localStorage.removeItem("id");
         }
-    }
+    },
+    persist: true
 })

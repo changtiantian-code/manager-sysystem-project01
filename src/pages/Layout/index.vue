@@ -112,6 +112,7 @@ import type { FormInstance, FormRules } from "element-plus";
 import { editPassword } from "@/api/login";
 import { useLoginStore  } from "@/stores/login"
 import { storeToRefs } from 'pinia'
+import { log } from "echarts/types/src/util/log.js";
 
 const router = useRouter();
 const loginStore = useLoginStore();
@@ -161,16 +162,19 @@ const submit = async () => {
   };
   const valid = await formRef.value.validate().catch(() => false);
   if (!valid) return;
-  const { id, username } = storeToRefs(loginStore);   
+  const { id, username } = storeToRefs(loginStore); 
   const res = await editPassword({
     ...submitData,
     id: id.value,
     username: username.value
   });
   if (res.code === 1) {
+    ElMessage.success("修改密码成功！")
     cancel();
     loginStore.logout();
-    router.push("/login");
+    setTimeout(() => {
+      router.push("/login");
+    }, 1000)
   } else {
     ElMessage.error(res.msg || "修改失败");
   }

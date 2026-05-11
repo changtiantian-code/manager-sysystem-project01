@@ -4,7 +4,7 @@ export interface LoginType {
 }
 
 export interface UserInfo {
-    id: number;
+    id: string;
     username: string;
     name: string;
     token: string;
